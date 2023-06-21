@@ -2,8 +2,16 @@
 
 import { DataGrid, GridColDef, GridEventListener } from "@mui/x-data-grid";
 
+export interface CompanyData {
+  id: string,
+  name: string,
+  category: string,
+  companyNumber: string,
+  SIC: string
+}
+
 export interface CompanyTableProps {
-  rows: any[],
+  rows: CompanyData[],
   columns: GridColDef[],
   onRowClick?: GridEventListener<"rowClick">
 
@@ -18,14 +26,14 @@ const CompanyTable = (props: CompanyTableProps) => {
         columns={props.columns}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 2 },
+            paginationModel: { page: 0, pageSize: 10 },
           },
         }}
         disableColumnMenu={true}
         disableRowSelectionOnClick={true}
         disableColumnFilter={true}
         disableDensitySelector={true}
-        pageSizeOptions={[2, 4]}
+        pageSizeOptions={[10, 20]}
         onRowClick={props.onRowClick}
       />
     </>
