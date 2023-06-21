@@ -1,19 +1,25 @@
 "use client";
 
-import { GridColDef, GridEventListener } from "@mui/x-data-grid";
+import { GridColDef, GridEventListener, GridPaginationModel } from "@mui/x-data-grid";
 import CompanyTable from "./CompanyTable";
 import { useRouter } from "next/navigation";
 import { AsyncState, useAsync } from "@/app/hooks/useAsync";
 import { CompanyApi } from "@/app/api/companies";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const CompanyTableContainer = () => {
   const router = useRouter();
+  const [page, setPage] = useState(1);
   const { status, data, error, execute } = useAsync(CompanyApi.getCompanies);
+  const { status: statusCount, data: count, error: errorCount, execute: execute2 } = useAsync(CompanyApi.getCompanyCount);
 
   useEffect(() => {
-    execute({ page: 10 });
-  }, [execute]);
+    execute({ page: page });
+  }, [execute, page])
+
+  useEffect(() => {
+    execute2({});
+  }, [execute2]);
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
@@ -36,13 +42,21 @@ const CompanyTableContainer = () => {
     router.push(`/company/${encodeURIComponent(params.id)}`);
   };
 
+  const onPageChange = (pagination: GridPaginationModel) => {
+    console.log("page change", pagination);
+    setPage(pagination.page);
+  };
+
   return (
     <>
-      {data && (
+      {data && count && (
         <CompanyTable
+          pagination={ {page: page, pageSize: 10 }}
+          rowCount={count}
           rows={data}
           columns={columns}
           onRowClick={onRowClick}
+          onPageChange={onPageChange}
         ></CompanyTable>
       )}
     </>

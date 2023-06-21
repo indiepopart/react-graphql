@@ -19,7 +19,10 @@ const CompanyView = (props: CompanyViewProperties) => {
   const company = props.company;
   return (
     <>
-      <Typography component="h1" variant="h4">
+      <Typography component="h1" variant="h3">
+        Company
+      </Typography>
+      <Typography component="h2" variant="h4">
         {company.name} - {company.id}
       </Typography>
       <Box mt={4}>

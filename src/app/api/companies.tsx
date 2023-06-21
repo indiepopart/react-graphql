@@ -23,9 +23,31 @@ export type CompanyDTO = {
 };
 
 export const CompanyApi = {
+
+  getCompanyCount: async () => {
+    try {
+      const response = await backendAPI.post("/graphql", {
+        query: `{
+        companyCount
+      }`,
+      });
+      return response.data.data.companyCount as number;
+    } catch (error) {
+      console.log("handle get company count error", error);
+      if (error instanceof AxiosError) {
+        let axiosError = error as AxiosError;
+        if (axiosError.response?.data) {
+          throw new Error(axiosError.response?.data as string);
+        }
+      }
+      throw new Error("Unknown error, please contact the administrator");
+    }
+  },
+
+
   getCompanies: async (params?: CompaniesQuery) => {
     try {
-      console.log("get companies request");
+      console.log("get companies request", params);
       //await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await backendAPI.post("/graphql", {
         query: `{
