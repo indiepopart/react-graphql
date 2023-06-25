@@ -1,16 +1,14 @@
-'use client'
+"use client";
 
+import ViewLayout from "@/app/components/layout/ViewLayout";
 import CompanyViewContainer from "@/app/components/companies/CompanyViewContainer";
 
-
 interface CompanyPageProperties {
-  id: string,
+  id: string;
 }
 
 const CompanyPage = (props: CompanyPageProperties) => {
-  return (
-    <CompanyViewContainer id={props.id}></CompanyViewContainer>
-  );
-}
+  return <CompanyViewContainer id={props.id}></CompanyViewContainer>;
+};
 
 export default CompanyPage;

@@ -29,6 +29,7 @@ const CompanyTable = (props: CompanyTableProps) => {
         rowCount={props.rowCount}
         rows={props.rows}
         columns={props.columns}
+        pageSizeOptions={[props.pagination.pageSize ]}
         initialState={{
           pagination: {
             paginationModel: { page: props.pagination.page, pageSize: props.pagination.pageSize },

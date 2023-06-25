@@ -10,6 +10,14 @@ export type OwnerDTO = {
   id: string;
 };
 
+export type CompanyPropertyDTO = {
+  id: string;
+  address: string;
+  county: string;
+  district: string;
+  titleNumber: string;
+}
+
 export type CompanyDTO = {
   name: string;
   SIC: string;
@@ -19,8 +27,15 @@ export type CompanyDTO = {
   countryOfOrigin: string;
   mortgagesOutstanding: number;
   status: string;
-  controlledBy: OwnerDTO[];
+  incorporationDate: string;
 };
+
+export type CompanyDetailsDTO = CompanyDTO & {
+  controlledBy: OwnerDTO[];
+  owns: CompanyPropertyDTO[];
+};
+
+
 
 export const CompanyApi = {
 
@@ -45,13 +60,13 @@ export const CompanyApi = {
   },
 
 
-  getCompanies: async (params?: CompaniesQuery) => {
+  getCompanyList: async (params?: CompaniesQuery) => {
     try {
       console.log("get companies request", params);
       //await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await backendAPI.post("/graphql", {
         query: `{
-        company(page: ${params?.page || 1}) {
+        companyList(page: ${params?.page || 1}) {
           name,
           SIC,
           id,
@@ -59,7 +74,7 @@ export const CompanyApi = {
           category
         }}`,
       });
-      return response.data.data.company as CompanyDTO[];
+      return response.data.data.companyList as CompanyDTO[];
     } catch (error) {
       console.log("handle get companies error", error);
       if (error instanceof AxiosError) {
@@ -86,14 +101,18 @@ export const CompanyApi = {
           countryOfOrigin,
           mortgagesOutstanding,
           status,
+          incorporationDate,
           controlledBy {
             name,
             id
           },
+          owns {
+            address,
+          }
         }
       }`,
       });
-      return response.data.data.companyById as CompanyDTO;
+      return response.data.data.companyById as CompanyDetailsDTO;
     } catch (err) {
       console.log("handle get company by id error", err);
       if (err instanceof AxiosError) {
@@ -106,32 +125,4 @@ export const CompanyApi = {
     }
   },
 
-  getCompanyByName: async (name: string) => {
-    try {
-      console.log("get company by name request");
-      //await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await backendAPI.post("/graphql", {
-        query: `{
-        companyByName(name: "${name}") {
-          name,
-          SIC,
-          id,
-          companyNumber,
-          category
-        }
-      }`,
-      });
-
-      return response.data.data.companyByName as CompanyDTO;
-    } catch (err) {
-      console.log("handle get company by name error", err);
-      if (err instanceof AxiosError) {
-        let axiosError = err as AxiosError;
-        if (axiosError.response?.data) {
-          throw new Error(axiosError.response?.data as string);
-        }
-      }
-      throw new Error("Unknown error, please contact the administrator");
-    }
-  },
 };

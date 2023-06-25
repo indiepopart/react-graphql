@@ -26,6 +26,9 @@ const CompanyViewContainer = (props: CompanyViewProperties) => {
     countryOfOrigin: data.countryOfOrigin,
     mortgagesOutstanding: data.mortgagesOutstanding,
     status: data.status,
+    incorporationDate: data.incorporationDate,
+    controlledBy: data.controlledBy,
+    owns: data.owns
   };
 
   return company && <CompanyView company={company}></CompanyView>;

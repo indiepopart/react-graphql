@@ -1,18 +1,28 @@
 "use client";
 
-import { Box, Button, Typography } from "@mui/material";
-import CompanyTable from "./companies/CompanyTable";
+import { Box, Typography } from "@mui/material";
 import CompanyTableContainer from "./companies/CompanyTableContainer";
+import { useSearchParams } from "next/navigation";
 
-export default function HomePage() {
+
+const HomePage = () => {
+
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") ? parseInt(searchParams.get("page") as string) : 1;
+
   return (
-    <div>
-      <Typography variant="h4" component="h1">
-        Companies
-      </Typography>
-      <Box mt={2}>
-        <CompanyTableContainer></CompanyTableContainer>
+    <>
+      <Box>
+        <Typography variant="h4" component="h1">
+          Companies
+        </Typography>
       </Box>
-    </div>
+      <Box mt={2}>
+        <CompanyTableContainer page={page}></CompanyTableContainer>
+      </Box>
+    </>
   );
 }
+
+
+export default HomePage;

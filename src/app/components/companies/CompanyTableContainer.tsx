@@ -1,30 +1,45 @@
 "use client";
 
-import { GridColDef, GridEventListener, GridPaginationModel } from "@mui/x-data-grid";
+import {
+  GridColDef,
+  GridEventListener,
+  GridPaginationModel,
+} from "@mui/x-data-grid";
 import CompanyTable from "./CompanyTable";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AsyncState, useAsync } from "@/app/hooks/useAsync";
 import { CompanyApi } from "@/app/api/companies";
 import { useEffect, useState } from "react";
 
-const CompanyTableContainer = () => {
+interface CompanyTableProperties {
+  page?: number;
+}
+
+const CompanyTableContainer = (props: CompanyTableProperties) => {
   const router = useRouter();
-  const [page, setPage] = useState(1);
-  const { status, data, error, execute } = useAsync(CompanyApi.getCompanies);
-  const { status: statusCount, data: count, error: errorCount, execute: execute2 } = useAsync(CompanyApi.getCompanyCount);
+  const searchParams = useSearchParams()!;
+  const pathName = usePathname();
+  const page = props.page ? props.page : 1;
+
+
+  const { status, data, error, execute } = useAsync(CompanyApi.getCompanyList);
+  const {
+    status: statusCount,
+    data: count,
+    error: errorCount,
+    execute: executeGetCount,
+  } = useAsync(CompanyApi.getCompanyCount);
 
   useEffect(() => {
     execute({ page: page });
-  }, [execute, page])
+  }, [execute, props.page]);
 
   useEffect(() => {
-    execute2({});
-  }, [execute2]);
+    executeGetCount({});
+  }, [executeGetCount]);
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "SIC", headerName: "SIC", width: 400, sortable: false },
-    { field: "category", headerName: "Category", width: 200, sortable: false },
     {
       field: "companyNumber",
       headerName: "Company #",
@@ -32,6 +47,8 @@ const CompanyTableContainer = () => {
       sortable: false,
     },
     { field: "name", headerName: "Company Name", width: 600, sortable: false },
+    { field: "category", headerName: "Category", width: 200, sortable: false },
+    { field: "SIC", headerName: "SIC", width: 400, sortable: false },
   ];
 
   const onRowClick: GridEventListener<"rowClick"> = (
@@ -44,14 +61,31 @@ const CompanyTableContainer = () => {
 
   const onPageChange = (pagination: GridPaginationModel) => {
     console.log("page change", pagination);
-    setPage(pagination.page);
+    const params = new URLSearchParams(searchParams);
+    params.set("page", pagination.page.toString());
+    const goto = pathName + '?' + params.toString();
+    console.log("goto", goto);
+    router.push(goto);
   };
+
+  const isFetchSuccess =
+    status === AsyncState.SUCCESS &&
+    statusCount === AsyncState.SUCCESS &&
+    data &&
+    count;
+  const isFetchError =
+    status === AsyncState.ERROR || statusCount === AsyncState.ERROR;
+  const isFetchPending =
+    status === AsyncState.PENDING || statusCount === AsyncState.PENDING;
 
   return (
     <>
-      {data && count && (
+      {isFetchPending && <div>Loading...</div>}
+      {isFetchError && <div>Error</div>}
+
+      {isFetchSuccess && (
         <CompanyTable
-          pagination={ {page: page, pageSize: 10 }}
+          pagination={{ page: page, pageSize: 10 }}
           rowCount={count}
           rows={data}
           columns={columns}
