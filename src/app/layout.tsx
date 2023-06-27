@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
-import WideLayout from "./components/layout/WideLayout";
+import WideLayout from "./layout/WideLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}><WideLayout>{children}</WideLayout></body>
+      <body className={inter.className}>
+          <WideLayout>{children}</WideLayout>
+      </body>
     </html>
   );
 }

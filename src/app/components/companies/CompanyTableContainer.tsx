@@ -8,7 +8,7 @@ import {
 import CompanyTable from "./CompanyTable";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AsyncState, useAsync } from "@/app/hooks/useAsync";
-import { CompanyApi } from "@/app/api/companies";
+import { CompanyApi } from "@/app/services/companies";
 import { useEffect, useState } from "react";
 
 interface CompanyTableProperties {
@@ -63,9 +63,7 @@ const CompanyTableContainer = (props: CompanyTableProperties) => {
     console.log("page change", pagination);
     const params = new URLSearchParams(searchParams);
     params.set("page", pagination.page.toString());
-    const goto = pathName + '?' + params.toString();
-    console.log("goto", goto);
-    router.push(goto);
+    router.push(pathName + '?' + params.toString());
   };
 
   const isFetchSuccess =

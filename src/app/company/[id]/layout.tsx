@@ -1,4 +1,4 @@
-import ViewLayout from "@/app/components/layout/ViewLayout";
+import ViewLayout from "@/app/layout/ViewLayout";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });

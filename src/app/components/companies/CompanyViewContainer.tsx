@@ -1,5 +1,5 @@
-import { CompanyApi } from "@/app/api/companies";
-import { AsyncState, useAsync } from "@/app/hooks/useAsync";
+import { CompanyApi } from "@/app/services/companies";
+import { AsyncState, useAsync } from "@/app/_hooks/useAsync";
 import { useEffect } from "react";
 import CompanyView from "./CompanyView";
 

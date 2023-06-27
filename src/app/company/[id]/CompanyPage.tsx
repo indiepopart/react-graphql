@@ -1,6 +1,6 @@
 "use client";
 
-import ViewLayout from "@/app/components/layout/ViewLayout";
+import ViewLayout from "@/app/layout/ViewLayout";
 import CompanyViewContainer from "@/app/components/companies/CompanyViewContainer";
 
 interface CompanyPageProperties {
