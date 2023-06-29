@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { AppState, Auth0Provider } from "@auth0/auth0-react";
 import { useRouter } from "next/navigation";
@@ -6,12 +6,12 @@ import React from "react";
 
 
 const Auth0ProviderWithNavigate = (props: { children: React.ReactNode }) => {
-
   const router = useRouter();
 
   const domain = process.env.NEXT_PUBLIC_AUTH0_DOMAIN || "";
   const clientId = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID || "";
   const redirectUri = process.env.NEXT_PUBLIC_AUTH0_CALLBACK_URL || "";
+  const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE || "";
 
   const onRedirectCallback = (appState?: AppState) => {
     console.log("appState", appState);
@@ -27,6 +27,7 @@ const Auth0ProviderWithNavigate = (props: { children: React.ReactNode }) => {
       domain={domain}
       clientId={clientId}
       authorizationParams={{
+        audience: audience,
         redirect_uri: redirectUri,
       }}
       onRedirectCallback={onRedirectCallback}

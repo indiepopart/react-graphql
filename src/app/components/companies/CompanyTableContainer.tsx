@@ -11,6 +11,7 @@ import { AsyncState, useAsync } from "@/app/hooks/useAsync";
 import { CompanyApi } from "@/app/services/companies";
 import { useEffect, useState } from "react";
 
+
 interface CompanyTableProperties {
   page?: number;
 }
