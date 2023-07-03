@@ -1,4 +1,7 @@
+'use client';
+
 import { useCallback, useState } from "react";
+import { useAccessToken } from "./useAccessToken";
 
 export const enum AsyncState {
   INITIAL = 1,
@@ -13,6 +16,7 @@ export const useAsync = <T, P, E = string>(
   const [status, setStatus] = useState<AsyncState>(AsyncState.INITIAL);
   const [error, setError] = useState<E | null>(null);
   const [data, setData] = useState<T | null>(null);
+  const { saveAccessToken } = useAccessToken();
 
   const execute = useCallback(
     async (params: P) => {
@@ -20,6 +24,7 @@ export const useAsync = <T, P, E = string>(
       setError(null)
       setData(null)
       try {
+        await saveAccessToken();
         const response = await asyncOperation(params);
         setStatus(AsyncState.SUCCESS);
         setData(response);
@@ -29,7 +34,7 @@ export const useAsync = <T, P, E = string>(
         setStatus(AsyncState.ERROR);
       }
     },
-    [asyncOperation]
+    [asyncOperation, saveAccessToken]
   );
 
   return {

@@ -30,6 +30,7 @@ const Auth0ProviderWithNavigate = (props: { children: React.ReactNode }) => {
         audience: audience,
         redirect_uri: redirectUri,
       }}
+      useRefreshTokens={true}
       onRedirectCallback={onRedirectCallback}
     >
       <>{props.children}</>

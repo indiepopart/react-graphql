@@ -9,8 +9,7 @@ import CompanyTable from "./CompanyTable";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AsyncState, useAsync } from "@/app/hooks/useAsync";
 import { CompanyApi } from "@/app/services/companies";
-import { useEffect, useState } from "react";
-
+import { useEffect } from "react";
 
 interface CompanyTableProperties {
   page?: number;
@@ -22,7 +21,6 @@ const CompanyTableContainer = (props: CompanyTableProperties) => {
   const pathName = usePathname();
   const page = props.page ? props.page : 1;
 
-
   const { status, data, error, execute } = useAsync(CompanyApi.getCompanyList);
   const {
     status: statusCount,
@@ -32,12 +30,13 @@ const CompanyTableContainer = (props: CompanyTableProperties) => {
   } = useAsync(CompanyApi.getCompanyCount);
 
   useEffect(() => {
+    // Only refresh when the page changes
     execute({ page: page });
-  }, [execute, props.page]);
+  }, [page]);
 
   useEffect(() => {
     executeGetCount({});
-  }, [executeGetCount]);
+  }, []);
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
@@ -62,9 +61,9 @@ const CompanyTableContainer = (props: CompanyTableProperties) => {
 
   const onPageChange = (pagination: GridPaginationModel) => {
     console.log("page change", pagination);
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     params.set("page", pagination.page.toString());
-    router.push(pathName + '?' + params.toString());
+    router.push(pathName + "?" + params.toString());
   };
 
   const isFetchSuccess =

@@ -41,6 +41,7 @@ export const CompanyApi = {
 
   getCompanyCount: async () => {
     try {
+      console.log("get company count request");
       const response = await backendAPI.post("/graphql", {
         query: `{
         companyCount
