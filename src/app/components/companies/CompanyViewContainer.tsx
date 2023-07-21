@@ -1,7 +1,7 @@
 import { CompanyApi } from "@/app/services/companies";
-import { AsyncState, useAsync } from "@/app/_hooks/useAsync";
 import { useEffect } from "react";
 import CompanyView from "./CompanyView";
+import { AsyncState, useAsync } from "@/app/hooks/useAsync";
 
 interface CompanyViewProperties {
   id: string;
@@ -28,7 +28,7 @@ const CompanyViewContainer = (props: CompanyViewProperties) => {
     status: data.status,
     incorporationDate: data.incorporationDate,
     controlledBy: data.controlledBy,
-    owns: data.owns
+    owns: data.owns,
   };
 
   return company && <CompanyView company={company}></CompanyView>;
